@@ -4,8 +4,8 @@ require 'progressbar'
 class ProgressBarTest < Test::Unit::TestCase
   SleepUnit = 0.01
 
-  def do_make_progress_bar (title, total)
-    ProgressBar.new(title, total)
+  def do_make_progress_bar (title, total, opts = {})
+    ProgressBar.new(title, total, opts)
   end
 
   def test_bytes
@@ -146,10 +146,20 @@ class ProgressBarTest < Test::Unit::TestCase
     }
     pbar.finish
   end
+
+  def test_custom_bar_mark_on_init
+    total = 100
+    pbar = do_make_progress_bar("test(init)", total, bar_mark: '=')
+    total.times {
+      sleep(SleepUnit)
+      pbar.inc
+    }
+    pbar.finish
+  end
 end
 
 class ReversedProgressBarTest < ProgressBarTest
-  def do_make_progress_bar (title, total)
-    ReversedProgressBar.new(title, total)
+  def do_make_progress_bar (title, total, opts = {})
+    ReversedProgressBar.new(title, total, opts)
   end
 end

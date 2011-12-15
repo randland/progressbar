@@ -12,20 +12,22 @@
 class ProgressBar
   VERSION = "0.9"
 
-  def initialize (title, total, out = STDERR, opts = {})
+  def initialize (title, total, opts = {})
+    defaults = { bar_mark: "o",
+                 out: STDERR,
+                 current: 0,
+                 format_arguments:  [:title, :percentage, :bar, :stat],
+                 terminal_width: 80,
+                 title_width: 14 }
+    defaults.merge(opts).each do |attr, val|
+      instance_variable_set("@#{attr}", val)
+    end
     @title = title
     @total = total
-    @out = out
-    @terminal_width = 80
-    @bar_mark = "o"
-    @current = 0
-    @previous = 0
     @finished_p = false
-    @start_time = Time.now
-    @previous_time = @start_time
-    @title_width = 14
-    @format = "%-#{@title_width}s %3d%% %s %s"
-    @format_arguments = [:title, :percentage, :bar, :stat]
+    @format ||= "%-#{@title_width}s %3d%% %s %s"
+    @previous = @current
+    @start_time = @previous_time = Time.now
     clear
     show
   end
