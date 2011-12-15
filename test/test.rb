@@ -91,6 +91,28 @@ class ProgressBarTest < Test::Unit::TestCase
     end
   end
 
+  def test_iter_rate_mode
+    total = 100
+    pbar = do_make_progress_bar("test(iter rate)", total)
+    pbar.iter_rate_mode
+    total.times do
+      pbar.inc
+      sleep(SleepUnit)
+    end
+    pbar.finish
+  end
+
+  def test_iter_rate_mode_slow
+    total = 5
+    pbar = do_make_progress_bar("test(iter slow)", total)
+    pbar.iter_rate_mode
+    total.times do
+      pbar.inc
+      sleep(1.5)
+    end
+    pbar.finish
+  end
+
   def test_remaining
     chunk = 100
     pbar = do_make_progress_bar('test(remaining)', chunk)

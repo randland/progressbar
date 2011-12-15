@@ -65,6 +65,14 @@ private
     end
   end
 
+  def fmt_stat_for_iter_rate
+    if @finished_p then
+      sprintf("%s %s", iter_rate, elapsed)
+    else
+      sprintf("%s %s", iter_rate, eta)
+    end
+  end
+
   def fmt_title
     @title[0,(@title_width - 1)] + ":"
   end
@@ -88,6 +96,15 @@ private
 
   def bytes
     convert_bytes(@current)
+  end
+
+  def iter_rate
+    iter_per_second = @current.to_f / (Time.now - @start_time)
+    if iter_per_second > 1
+      sprintf("%.2f/s |", iter_per_second)
+    else
+      sprintf("%.2fs ea |", 1 / iter_per_second)
+    end
   end
 
   def format_time (t)
@@ -205,6 +222,10 @@ public
 
   def file_transfer_mode
     @format_arguments = [:title, :percentage, :bar, :stat_for_file_transfer]
+  end
+
+  def iter_rate_mode
+    @format_arguments = [:title, :percentage, :bar, :stat_for_iter_rate]
   end
 
   def format= (format)
