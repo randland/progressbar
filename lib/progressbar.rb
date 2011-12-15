@@ -309,24 +309,26 @@ public
     show_if_needed
   end
 
+  def colorize color
+    @status = color.to_sym
+    show_if_needed
+  end
+
   def hide_colored_status
     @status = nil
     show_if_needed
   end
 
   def reset_status
-    @status = :green
-    show_if_needed
+    colorize :green
   end
 
   def warning
-    @status = :yellow unless @status == :red
-    show_if_needed
+    colorize(:yellow) unless @status == :red
   end
 
   def error
-    @status = :red
-    show_if_needed
+    colorize :red
   end
 
   def truncate_title
