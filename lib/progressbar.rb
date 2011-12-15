@@ -26,21 +26,30 @@ class ProgressBar
     @@_defaults = {}
   end
 
+  def self.default_title_width
+    14
+  end
+
+  def self.default_format *args
+    args ||= [default_title_width]
+    "%-#{args[0]}s %3d%% %s %s"
+  end
+
   def initialize (title, total, opts = {})
     defaults = { bar_mark: '#',
                  out: STDERR,
                  current: 0,
                  format_arguments:  [:title, :percentage, :bar, :stat],
                  terminal_width: 80,
-                 title_width: [14, title.size + 1].max }
+                 title_width: [self.class.default_title_width, title.size + 1].max }
     defaults.merge(@@_defaults).merge(opts).each do |attr, val|
       instance_variable_set("@#{attr}", val)
     end
     @title = title
     @total = total
     @finished_p = false
-    @title_width = 14 if @truncate_title
-    @format ||= "%-#{@title_width}s %3d%% %s %s"
+    @title_width = self.class.default_title_width if @truncate_title
+    @format ||= self.class.default_format @title_width
     @previous = @current
     @start_time = @previous_time = Time.now
     clear
@@ -322,8 +331,8 @@ public
 
   def truncate_title
     @truncate_title = true
-    @title_width = 14
-    @format = "%-#{@title_width}s %3d%% %s %s"
+    @title_width = self.class.default_title_width
+    @format = self.class.default_format
     show
   end
 
