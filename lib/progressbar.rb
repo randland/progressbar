@@ -32,7 +32,7 @@ class ProgressBar
                  current: 0,
                  format_arguments:  [:title, :percentage, :bar, :stat],
                  terminal_width: 80,
-                 title_width: 14 }
+                 title_width: [14, title.size + 1].max }
     defaults.merge(@@_defaults).merge(opts).each do |attr, val|
       instance_variable_set("@#{attr}", val)
     end
@@ -295,7 +295,7 @@ public
   end
 
   def show_colored_status
-    @status = :green
+    @status ||= :green
     show_if_needed
   end
 

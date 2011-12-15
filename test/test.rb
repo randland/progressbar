@@ -135,12 +135,22 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar.finish
   end
 
+  def test_long_title
+    total=100
+    pbar = do_make_progress_bar('test(testing really long titles)', total)
+    total.times do
+      sleep(SleepUnit)
+      pbar.inc
+    end
+    pbar.finish
+  end
+
   def test_remaining
     chunk = 100
     pbar = do_make_progress_bar('test(remaining)', chunk)
     pbar.inc
     3.times do
-      (chunk - 10).times do
+      (chunk - 50).times do
         pbar.inc
         sleep(SleepUnit)
       end
@@ -189,6 +199,7 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar.error
     (total / 3).times {
       sleep(SleepUnit)
+      pbar.warning
       pbar.inc
     }
     pbar.reset_status
