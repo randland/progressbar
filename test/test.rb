@@ -234,6 +234,16 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar.finish
   end
 
+  def test_truncate_title
+    total = 100
+    pbar = do_make_progress_bar('test(truncation)', total)
+    pbar.truncate_title
+    total.times do |x|
+      sleep(SleepUnit)
+      pbar.inc
+    end
+    pbar.finish
+  end
 end
 
 class ReversedProgressBarTest < ProgressBarTest

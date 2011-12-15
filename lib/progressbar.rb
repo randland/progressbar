@@ -39,6 +39,7 @@ class ProgressBar
     @title = title
     @total = total
     @finished_p = false
+    @title_width = 14 if @truncate_title
     @format ||= "%-#{@title_width}s %3d%% %s %s"
     @previous = @current
     @start_time = @previous_time = Time.now
@@ -318,6 +319,14 @@ public
     @status = :red
     show_if_needed
   end
+
+  def truncate_title
+    @truncate_title = true
+    @title_width = 14
+    @format = "%-#{@title_width}s %3d%% %s %s"
+    show
+  end
+
 end
 
 class ReversedProgressBar < ProgressBar
