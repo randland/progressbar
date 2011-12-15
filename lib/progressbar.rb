@@ -35,6 +35,13 @@ class ProgressBar
     "%-#{args[0]}s %3d%% %s %s"
   end
 
+  attr_reader   :title
+  attr_reader   :current
+  attr_reader   :total
+  attr_reader   :status
+  attr_accessor :start_time
+  attr_writer   :bar_mark
+
   def initialize (title, total, opts = {})
     defaults = { bar_mark: '#',
                  out: STDERR,
@@ -56,12 +63,114 @@ class ProgressBar
     show
   end
 
-  attr_reader   :title
-  attr_reader   :current
-  attr_reader   :total
-  attr_reader   :status
-  attr_accessor :start_time
-  attr_writer   :bar_mark
+  def clear
+    @out.print "\r"
+    @out.print(" " * (get_term_width - 1))
+    @out.print "\r"
+  end
+
+  def finish
+    @current = @total
+    @finished_p = true
+    show
+  end
+
+  def finished?
+    @finished_p
+  end
+
+  def file_transfer_mode
+    @format_arguments = [:title, :percentage, :bar, :stat_for_file_transfer]
+    show
+  end
+
+  def iter_rate_mode
+    @format_arguments = [:title, :percentage, :bar, :stat_for_iter_rate]
+    show
+  end
+
+  def format= (format)
+    @format = format
+    show
+  end
+
+  def format_arguments= (arguments)
+    @format_arguments = arguments
+    show
+  end
+
+  def halt
+    @finished_p = true
+    show
+  end
+
+  def inc (step = 1)
+    @current += step
+    @current = @total if @current > @total
+    show_if_needed
+    @previous = @current
+  end
+
+  def set (count)
+    if count < 0 || count > @total
+      raise "invalid count: #{count} (total: #{@total})"
+    end
+    @current = count
+    show_if_needed
+    @previous = @current
+  end
+
+  def inspect
+    "#<ProgressBar:#{@current}/#{@total}>"
+  end
+
+  def title= val
+    @title = val
+    show
+  end
+
+  def total= val
+    @total = val
+    show
+  end
+
+  def remaining= val
+    self.total = @current + val
+  end
+
+  def show_colored_status
+    @status ||= :green
+    show_if_needed
+  end
+
+  def colorize color
+    @status = color.to_sym
+    show_if_needed
+  end
+
+  def hide_colored_status
+    @status = nil
+    show_if_needed
+  end
+
+  def reset_status
+    colorize :green
+  end
+
+  def warning
+    colorize(:yellow) unless @status == :red
+  end
+
+  def error
+    colorize :red
+  end
+
+  def truncate_title
+    @truncate_title = true
+    @title_width = self.class.default_title_width
+    @format = self.class.default_format
+    show
+  end
 
 private
 
@@ -226,118 +335,6 @@ private
 
     @previous_status = @status
   end
-
-public
-
-  def clear
-    @out.print "\r"
-    @out.print(" " * (get_term_width - 1))
-    @out.print "\r"
-  end
-
-  def finish
-    @current = @total
-    @finished_p = true
-    show
-  end
-
-  def finished?
-    @finished_p
-  end
-
-  def file_transfer_mode
-    @format_arguments = [:title, :percentage, :bar, :stat_for_file_transfer]
-    show
-  end
-
-  def iter_rate_mode
-    @format_arguments = [:title, :percentage, :bar, :stat_for_iter_rate]
-    show
-  end
-
-  def format= (format)
-    @format = format
-    show
-  end
-
-  def format_arguments= (arguments)
-    @format_arguments = arguments
-    show
-  end
-
-  def halt
-    @finished_p = true
-    show
-  end
-
-  def inc (step = 1)
-    @current += step
-    @current = @total if @current > @total
-    show_if_needed
-    @previous = @current
-  end
-
-  def set (count)
-    if count < 0 || count > @total
-      raise "invalid count: #{count} (total: #{@total})"
-    end
-    @current = count
-    show_if_needed
-    @previous = @current
-  end
-
-  def inspect
-    "#<ProgressBar:#{@current}/#{@total}>"
-  end
-
-  def title= val
-    @title = val
-    show
-  end
-
-  def total= val
-    @total = val
-    show
-  end
-
-  def remaining= val
-    self.total = @current + val
-  end
-
-  def show_colored_status
-    @status ||= :green
-    show_if_needed
-  end
-
-  def colorize color
-    @status = color.to_sym
-    show_if_needed
-  end
-
-  def hide_colored_status
-    @status = nil
-    show_if_needed
-  end
-
-  def reset_status
-    colorize :green
-  end
-
-  def warning
-    colorize(:yellow) unless @status == :red
-  end
-
-  def error
-    colorize :red
-  end
-
-  def truncate_title
-    @truncate_title = true
-    @title_width = self.class.default_title_width
-    @format = self.class.default_format
-    show
-  end
-
 end
 
 class ReversedProgressBar < ProgressBar
