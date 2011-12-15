@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rake", ">= 0"
   s.add_development_dependency "simplecov", ">= 0.3.5"
   s.add_development_dependency "bluecloth", ">= 0.3.5"
+  s.add_dependency "colorful", ">= 0.0.2"
 
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files`.split("\n").map{|f| f =~ /^bin\/(.*)/ ? $1 : nil}.compact

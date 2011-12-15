@@ -30,6 +30,27 @@ class ProgressBarTest < Test::Unit::TestCase
     puts
   end
 
+  def test_custom_bar_mark
+    total = 100
+    pbar = do_make_progress_bar("test(custom)", total)
+    pbar.bar_mark = '='
+    total.times {
+      sleep(SleepUnit)
+      pbar.inc
+    }
+    pbar.finish
+  end
+
+  def test_custom_bar_mark_on_init
+    total = 100
+    pbar = do_make_progress_bar("test(init)", total, bar_mark: '=')
+    total.times {
+      sleep(SleepUnit)
+      pbar.inc
+    }
+    pbar.finish
+  end
+
   def test_halt
     total = 100
     pbar = do_make_progress_bar("test(halt)", total)
@@ -108,6 +129,27 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar.halt
   end
 
+  def test_status
+    total = 150
+    pbar = do_make_progress_bar("test(status)", total)
+    pbar.show_colored_status
+    (total / 3).times {
+      sleep(SleepUnit)
+      pbar.inc
+    }
+    pbar.warning
+    (total / 3).times {
+      sleep(SleepUnit)
+      pbar.inc
+    }
+    pbar.error
+    (total / 3).times {
+      sleep(SleepUnit)
+      pbar.inc
+    }
+    pbar.finish
+  end
+
   def test_title
     total = 100
     pbar = do_make_progress_bar('test(title)', total)
@@ -136,26 +178,6 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar.finish
   end
 
-  def test_custom_bar_mark
-    total = 100
-    pbar = do_make_progress_bar("test(custom)", total)
-    pbar.bar_mark = '='
-    total.times {
-      sleep(SleepUnit)
-      pbar.inc
-    }
-    pbar.finish
-  end
-
-  def test_custom_bar_mark_on_init
-    total = 100
-    pbar = do_make_progress_bar("test(init)", total, bar_mark: '=')
-    total.times {
-      sleep(SleepUnit)
-      pbar.inc
-    }
-    pbar.finish
-  end
 end
 
 class ReversedProgressBarTest < ProgressBarTest

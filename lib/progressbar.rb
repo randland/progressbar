@@ -8,6 +8,7 @@
 # You can redistribute it and/or modify it under the terms
 # of Ruby's license.
 #
+require 'colorful'
 
 class ProgressBar
   VERSION = "0.9"
@@ -35,22 +36,9 @@ class ProgressBar
   attr_reader   :title
   attr_reader   :current
   attr_reader   :total
+  attr_reader   :status
   attr_accessor :start_time
   attr_writer   :bar_mark
-
-  def title= val
-    @title = val
-    show
-  end
-
-  def total= val
-    @total = val
-    show
-  end
-
-  def remaining= val
-    self.total = @current + val
-  end
 
 private
 
@@ -166,11 +154,11 @@ private
 
     width = get_term_width
     if line.length == width - 1
-      @out.print(line + eol)
+      @out.print(line.send(@status || :to_s) + eol)
       @out.flush
     elsif line.length >= width
       @terminal_width = [@terminal_width - (line.length - width + 1), 0].max
-      if @terminal_width == 0 then @out.print(line + eol) else show end
+      if @terminal_width == 0 then @out.print(line.send(@status || :to_s) + eol) else show end
     else # line.length < width - 1
       @terminal_width += width - line.length + 1
       show
@@ -189,9 +177,12 @@ private
 
     # Use "!=" instead of ">" to support negative changes
     if cur_percentage != prev_percentage ||
-        Time.now - @previous_time >= 1 || @finished_p
+        Time.now - @previous_time >= 1 || @finished_p ||
+        @previous_status != @status
       show
     end
+
+    @previous_status = @status
   end
 
 public
@@ -249,6 +240,44 @@ public
     "#<ProgressBar:#{@current}/#{@total}>"
   end
 
+  def title= val
+    @title = val
+    show
+  end
+
+  def total= val
+    @total = val
+    show
+  end
+
+  def remaining= val
+    self.total = @current + val
+  end
+
+  def show_colored_status
+    @status = :green
+    show_if_needed
+  end
+
+  def hide_colored_status
+    @status = nil
+    show_if_needed
+  end
+
+  def reset_status
+    @status = :green
+    show_if_needed
+  end
+
+  def warning
+    @status = :yellow unless @status == :red
+    show_if_needed
+  end
+
+  def error
+    @status = :red
+    show_if_needed
+  end
 end
 
 class ReversedProgressBar < ProgressBar
