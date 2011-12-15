@@ -12,7 +12,7 @@
 class ProgressBar
   VERSION = "0.9"
 
-  def initialize (title, total, out = STDERR)
+  def initialize (title, total, out = STDERR, opts = {})
     @title = title
     @total = total
     @out = out
@@ -35,6 +35,20 @@ class ProgressBar
   attr_reader   :total
   attr_accessor :start_time
   attr_writer   :bar_mark
+
+  def title= val
+    @title = val
+    show
+  end
+
+  def total= val
+    @total = val
+    show
+  end
+
+  def remaining= val
+    self.total = @current + val
+  end
 
 private
 

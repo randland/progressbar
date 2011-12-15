@@ -70,6 +70,24 @@ class ProgressBarTest < Test::Unit::TestCase
     end
   end
 
+  def test_remaining
+    chunk = 100
+    pbar = do_make_progress_bar('test(remaining)', chunk)
+    pbar.inc
+    3.times do
+      (chunk - 10).times do
+        pbar.inc
+        sleep(SleepUnit)
+      end
+      pbar.remaining = chunk
+    end
+    chunk.times do
+      pbar.inc
+      sleep(SleepUnit)
+    end
+    pbar.finish
+  end
+
   def test_set
     total = 1000
     pbar = do_make_progress_bar("test(set)", total)
@@ -88,6 +106,28 @@ class ProgressBarTest < Test::Unit::TestCase
       sleep(SleepUnit)
     }
     pbar.halt
+  end
+
+  def test_title
+    total = 100
+    pbar = do_make_progress_bar('test(title)', total)
+    total.times {|i|
+      pbar.inc
+      pbar.title = "test(#{i + 1})"
+      sleep(SleepUnit)
+    }
+    pbar.finish
+  end
+
+  def test_total
+    total = 100
+    pbar = do_make_progress_bar('test(total)', total)
+    pbar.inc
+    total.step(1, -1) {|x|
+      pbar.total = x
+      sleep(SleepUnit)
+    }
+    pbar.finish
   end
 
   def test_total_zero
