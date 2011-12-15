@@ -14,7 +14,7 @@ class ProgressBar
   VERSION = "0.9"
 
   def initialize (title, total, opts = {})
-    defaults = { bar_mark: "o",
+    defaults = { bar_mark: '#',
                  out: STDERR,
                  current: 0,
                  format_arguments:  [:title, :percentage, :bar, :stat],
