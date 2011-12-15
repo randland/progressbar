@@ -61,6 +61,18 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar.finish
   end
 
+  def test_globals
+    total = 100
+    ProgressBar.columns = 60
+    pbar = do_make_progress_bar("test(globals)", total)
+    total.times {
+      sleep(SleepUnit)
+      pbar.inc
+    }
+    pbar.finish
+    ProgressBar.clear_globals
+  end
+
   def test_halt
     total = 100
     pbar = do_make_progress_bar("test(halt)", total)
@@ -113,11 +125,11 @@ class ProgressBarTest < Test::Unit::TestCase
   end
 
   def test_iter_rate_mode_slow
-    total = 5
+    total = 3
     pbar = do_make_progress_bar("test(iter slow)", total)
     pbar.iter_rate_mode
     total.times do
-      sleep(1.5)
+      sleep(1.1)
       pbar.inc
     end
     pbar.finish
@@ -154,7 +166,7 @@ class ProgressBarTest < Test::Unit::TestCase
   def test_slow
     total = 100000
     pbar = do_make_progress_bar("test(slow)", total)
-    0.step(500, 1) {|x|
+    0.step(300, 1) {|x|
       sleep(SleepUnit)
       pbar.set(x)
     }
@@ -179,6 +191,7 @@ class ProgressBarTest < Test::Unit::TestCase
       sleep(SleepUnit)
       pbar.inc
     }
+    pbar.reset_status
     pbar.finish
   end
 

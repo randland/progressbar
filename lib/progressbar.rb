@@ -12,6 +12,19 @@ require 'colorful'
 
 class ProgressBar
   VERSION = "0.9"
+  @@_defaults ||= {}
+
+  def self.method_missing method, *args, &blk
+    if method.to_s.match(/=$/)
+      @@_defaults[method.to_s.sub(/=$/,'').to_sym] = args[0]
+    else
+      super
+    end
+  end
+
+  def self.clear_globals
+    @@_defaults = {}
+  end
 
   def initialize (title, total, opts = {})
     defaults = { bar_mark: '#',
@@ -20,7 +33,7 @@ class ProgressBar
                  format_arguments:  [:title, :percentage, :bar, :stat],
                  terminal_width: 80,
                  title_width: 14 }
-    defaults.merge(opts).each do |attr, val|
+    defaults.merge(@@_defaults).merge(opts).each do |attr, val|
       instance_variable_set("@#{attr}", val)
     end
     @title = title
@@ -224,18 +237,22 @@ public
 
   def file_transfer_mode
     @format_arguments = [:title, :percentage, :bar, :stat_for_file_transfer]
+    show
   end
 
   def iter_rate_mode
     @format_arguments = [:title, :percentage, :bar, :stat_for_iter_rate]
+    show
   end
 
   def format= (format)
     @format = format
+    show
   end
 
   def format_arguments= (arguments)
     @format_arguments = arguments
+    show
   end
 
   def halt
