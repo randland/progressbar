@@ -13,8 +13,8 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar = do_make_progress_bar("test(bytes)", total)
     pbar.file_transfer_mode
     0.step(total, 2**14) {|x|
-      pbar.set(x)
       sleep(SleepUnit)
+      pbar.set(x)
     }
     pbar.finish
   end
@@ -28,6 +28,16 @@ class ProgressBarTest < Test::Unit::TestCase
     }
     pbar.clear
     puts
+  end
+
+  def test_columns
+    total = 100
+    pbar = do_make_progress_bar("test(columns)", total, columns: 60)
+    total.times {
+      sleep(SleepUnit)
+      pbar.inc
+    }
+    pbar.finish
   end
 
   def test_custom_bar_mark
@@ -96,8 +106,8 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar = do_make_progress_bar("test(iter rate)", total)
     pbar.iter_rate_mode
     total.times do
-      pbar.inc
       sleep(SleepUnit)
+      pbar.inc
     end
     pbar.finish
   end
@@ -107,8 +117,8 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar = do_make_progress_bar("test(iter slow)", total)
     pbar.iter_rate_mode
     total.times do
-      pbar.inc
       sleep(1.5)
+      pbar.inc
     end
     pbar.finish
   end
@@ -145,8 +155,8 @@ class ProgressBarTest < Test::Unit::TestCase
     total = 100000
     pbar = do_make_progress_bar("test(slow)", total)
     0.step(500, 1) {|x|
-      pbar.set(x)
       sleep(SleepUnit)
+      pbar.set(x)
     }
     pbar.halt
   end
@@ -176,9 +186,9 @@ class ProgressBarTest < Test::Unit::TestCase
     total = 100
     pbar = do_make_progress_bar('test(title)', total)
     total.times {|i|
+      sleep(SleepUnit)
       pbar.inc
       pbar.title = "test(#{i + 1})"
-      sleep(SleepUnit)
     }
     pbar.finish
   end
@@ -188,8 +198,8 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar = do_make_progress_bar('test(total)', total)
     pbar.inc
     total.step(1, -1) {|x|
-      pbar.total = x
       sleep(SleepUnit)
+      pbar.total = x
     }
     pbar.finish
   end

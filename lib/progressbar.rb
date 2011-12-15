@@ -147,6 +147,8 @@ private
   def get_term_width
     if ENV['COLUMNS'] =~ /^\d+$/
       ENV['COLUMNS'].to_i
+    elsif @columns
+      @columns
     elsif (RUBY_PLATFORM =~ /java/ || (!STDIN.tty? && ENV['TERM'])) && shell_command_exists?('tput')
       `tput cols`.to_i
     elsif STDIN.tty? && shell_command_exists?('stty')
