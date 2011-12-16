@@ -43,6 +43,14 @@ class ProgressBar
     @@_defaults[:output_disabled] = false
   end
 
+  def self.iter_rate_mode
+    @@_defaults[:iter_rate_mode] = true
+  end
+
+  def self.file_transfer_mode
+    @@_defaults[:file_transfer_mode] = true
+  end
+
   attr_reader   :title
   attr_reader   :current
   attr_reader   :total
@@ -72,6 +80,8 @@ class ProgressBar
     @previous = @current
     @start_time = @previous_time = Time.now
     clear
+    iter_rate_mode if @@_defaults[:iter_rate_mode]
+    file_transfer_mode if @@_defaults[:file_transfer_mode]
     show
   end
 

@@ -72,6 +72,7 @@ class ProgressBarTest < Test::Unit::TestCase
   def test_globals
     total = 100
     ProgressBar.columns = 60
+    ProgressBar.iter_rate_mode
     pbar = do_make_progress_bar("test(globals)", total)
     total.times {
       sleep(SleepUnit)
