@@ -68,9 +68,9 @@ class ProgressBar
   end
 
   def clear
-    @out.print "\r"
-    @out.print(" " * (get_term_width - 1))
-    @out.print "\r"
+    output "\r"
+    output(" " * (get_term_width - 1))
+    output "\r"
   end
 
   def finish
@@ -177,6 +177,14 @@ class ProgressBar
   end
 
 private
+
+  def output str
+    @out.print str
+  end
+
+  def flush
+    @out.flush
+  end
 
   def fmt_bar
     bar_width = do_percentage * @terminal_width / 100
@@ -309,11 +317,11 @@ private
 
     width = get_term_width
     if line.length == width - 1
-      @out.print(line.send(@status || :to_s) + eol)
-      @out.flush
+      output(line.send(@status || :to_s) + eol)
+      flush
     elsif line.length >= width
       @terminal_width = [@terminal_width - (line.length - width + 1), 0].max
-      if @terminal_width == 0 then @out.print(line.send(@status || :to_s) + eol) else show end
+      if @terminal_width == 0 then output(line.send(@status || :to_s) + eol) else show end
     else # line.length < width - 1
       @terminal_width += width - line.length + 1
       show
