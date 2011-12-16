@@ -135,8 +135,18 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar.finish
   end
 
+  def test_legacy_init
+    total = 10
+    pbar = do_make_progress_bar("test(legacy)", total, STDERR)
+    total.times do
+      sleep(SleepUnit)
+      pbar.inc
+    end
+    pbar.finish
+  end
+
   def test_long_title
-    total=100
+    total=10
     pbar = do_make_progress_bar('test(testing really long titles)', total)
     total.times do
       sleep(SleepUnit)

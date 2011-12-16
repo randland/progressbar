@@ -43,6 +43,10 @@ class ProgressBar
   attr_writer   :bar_mark
 
   def initialize (title, total, opts = {})
+    if opts.respond_to? :print
+      opts = { out: opts }
+    end
+
     defaults = { bar_mark: '#',
                  out: STDERR,
                  current: 0,
