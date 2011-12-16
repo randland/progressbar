@@ -61,6 +61,14 @@ class ProgressBarTest < Test::Unit::TestCase
     pbar.finish
   end
 
+  def test_disable_output
+    total = 3
+    ProgressBar.disable_output
+    pbar = do_make_progress_bar("test(disabled)", total)
+    pbar.finish
+    ProgressBar.enable_output
+  end
+
   def test_globals
     total = 100
     ProgressBar.columns = 60

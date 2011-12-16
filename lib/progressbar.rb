@@ -35,6 +35,14 @@ class ProgressBar
     "%-#{args[0]}s %3d%% %s %s"
   end
 
+  def self.disable_output
+    @@_defaults[:output_disabled] = true
+  end
+
+  def self.enable_output
+    @@_defaults[:output_disabled] = false
+  end
+
   attr_reader   :title
   attr_reader   :current
   attr_reader   :total
@@ -179,11 +187,11 @@ class ProgressBar
 private
 
   def output str
-    @out.print str
+    @out.print str unless @@_defaults[:output_disabled]
   end
 
   def flush
-    @out.flush
+    @out.flush unless @@_defaults[:output_disabled]
   end
 
   def fmt_bar
