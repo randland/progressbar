@@ -205,7 +205,7 @@ class ProgressBarTest < Test::Unit::TestCase
   def test_status
     total = 150
     pbar = do_make_progress_bar("test(status)", total)
-    pbar.show_colored_status
+    pbar.color_status
     (total / 3).times {
       sleep(SleepUnit)
       pbar.inc

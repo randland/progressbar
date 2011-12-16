@@ -51,6 +51,10 @@ class ProgressBar
     @@_defaults[:file_transfer_mode] = true
   end
 
+  def self.color_status
+    @@_defaults[:color_status] = true
+  end
+
   attr_reader   :title
   attr_reader   :current
   attr_reader   :total
@@ -82,6 +86,7 @@ class ProgressBar
     clear
     iter_rate_mode if @@_defaults[:iter_rate_mode]
     file_transfer_mode if @@_defaults[:file_transfer_mode]
+    color_status if @@_defaults[:color_status]
     show
   end
 
@@ -160,7 +165,7 @@ class ProgressBar
     self.total = @current + val
   end
 
-  def show_colored_status
+  def color_status
     @status ||= :green
     show_if_needed
   end
@@ -170,7 +175,7 @@ class ProgressBar
     show_if_needed
   end
 
-  def hide_colored_status
+  def hide_color_status
     @status = nil
     show_if_needed
   end
