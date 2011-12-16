@@ -79,7 +79,7 @@ class ProgressBar
     @title = title
     @total = total
     @finished_p = false
-    @title_width = self.class.default_title_width if @truncate_title
+    @title_width = self.class.default_title_width unless @expand_title
     @format ||= self.class.default_format @title_width
     @previous = @current
     @start_time = @previous_time = Time.now
@@ -192,9 +192,9 @@ class ProgressBar
     colorize :red
   end
 
-  def truncate_title
-    @truncate_title = true
-    @title_width = self.class.default_title_width
+  def expand_title
+    @expand_title = true
+    @title_width = title.size + 1
     @format = self.class.default_format
     show
   end

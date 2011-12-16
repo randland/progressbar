@@ -157,6 +157,7 @@ class ProgressBarTest < Test::Unit::TestCase
   def test_long_title
     total=10
     pbar = do_make_progress_bar('test(testing really long titles)', total)
+    pbar.expand_title
     total.times do
       sleep(SleepUnit)
       pbar.inc
@@ -250,17 +251,6 @@ class ProgressBarTest < Test::Unit::TestCase
   def test_total_zero
     total = 0
     pbar = do_make_progress_bar("test(total=0)", total)
-    pbar.finish
-  end
-
-  def test_truncate_title
-    total = 100
-    pbar = do_make_progress_bar('test(truncation)', total)
-    pbar.truncate_title
-    total.times do |x|
-      sleep(SleepUnit)
-      pbar.inc
-    end
     pbar.finish
   end
 end
