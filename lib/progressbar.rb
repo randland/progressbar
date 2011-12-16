@@ -258,7 +258,7 @@ private
 
   def transfer_rate
     bytes_per_second = @current.to_f / (Time.now - @start_time)
-    sprintf("%s/s", convert_bytes(bytes_per_second))
+    sprintf("%s/s |", convert_bytes(bytes_per_second))
   end
 
   def bytes
