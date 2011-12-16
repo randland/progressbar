@@ -268,9 +268,9 @@ private
   def iter_rate
     iter_per_second = @current.to_f / (Time.now - @start_time)
     if iter_per_second > 1
-      sprintf("%.2f / s |", iter_per_second)
+      sprintf("%8.2f/s |", iter_per_second)
     else
-      sprintf("%.2fs ea |", 1 / iter_per_second)
+      sprintf("%6.2fs ea |", 1 / iter_per_second)
     end
   end
 
