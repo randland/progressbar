@@ -47,7 +47,7 @@ class ProgressBar
       opts = { out: opts }
     end
 
-    defaults = { bar_mark: '#',
+    defaults = { bar_mark: '=',
                  out: STDERR,
                  current: 0,
                  format_arguments:  [:title, :percentage, :bar, :stat],

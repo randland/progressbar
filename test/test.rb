@@ -43,7 +43,7 @@ class ProgressBarTest < Test::Unit::TestCase
   def test_custom_bar_mark
     total = 100
     pbar = do_make_progress_bar("test(custom)", total)
-    pbar.bar_mark = '='
+    pbar.bar_mark = '%'
     total.times {
       sleep(SleepUnit)
       pbar.inc
@@ -53,7 +53,7 @@ class ProgressBarTest < Test::Unit::TestCase
 
   def test_custom_bar_mark_on_init
     total = 100
-    pbar = do_make_progress_bar("test(init)", total, bar_mark: '=')
+    pbar = do_make_progress_bar("test(init)", total, bar_mark: '>')
     total.times {
       sleep(SleepUnit)
       pbar.inc
