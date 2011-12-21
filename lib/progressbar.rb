@@ -344,7 +344,11 @@ private
       flush
     elsif line.length >= width
       @terminal_width = [@terminal_width - (line.length - width + 1), 0].max
-      if @terminal_width == 0 then output(line.send(@status || :to_s) + eol) else show end
+      if @terminal_width <= 0
+        output(line.send(@status || :to_s) + eol)
+      else
+        show
+      end
     else # line.length < width - 1
       @terminal_width += width - line.length + 1
       show
