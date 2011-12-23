@@ -104,7 +104,7 @@ class ProgressBar
   end
 
   def rate
-    (@end_time || Time.now) - @start_time / @current.to_f
+    ((@end_time || Time.now) - @start_time).seconds / @current.to_f
   end
 
   def finished?
