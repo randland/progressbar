@@ -12,7 +12,7 @@ require 'colorful'
 
 class ProgressBar
   VERSION = "0.9"
-  @@_defaults ||= {}
+  @@_defaults ||= {title_width: 14}
 
   def self.method_missing method, *args, &blk
     if method.to_s.match(/=$/)
@@ -27,7 +27,7 @@ class ProgressBar
   end
 
   def self.default_title_width
-    14
+    @@_defaults[:title_width]
   end
 
   def self.default_format *args
