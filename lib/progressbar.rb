@@ -210,7 +210,7 @@ private
   end
 
   def fmt_bar
-    bar_width = do_percentage * @terminal_width / 100
+    bar_width = (do_percentage * @terminal_width / 100).to_i
     sprintf("|%s%s|",
             @bar_mark * bar_width,
             " " *  (@terminal_width - bar_width))
