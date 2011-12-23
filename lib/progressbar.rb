@@ -98,8 +98,13 @@ class ProgressBar
 
   def finish
     @current = @total
+    @end_time = Time.now
     @finished_p = true
     show
+  end
+
+  def rate
+    (@end_time || Time.now) - @start_time / @current.to_f
   end
 
   def finished?
